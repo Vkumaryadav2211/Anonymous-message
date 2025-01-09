@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Message</title>
+    <script>
+        async function sendMessage(event) {
+            event.preventDefault();
+            const message = document.getElementById("message").value;
 
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            const webhookUrl = "https://chat.googleapis.com/v1/spaces/XXXXXX/messages?key=XXXXXX&token=XXXXXX";
+
+            const payload = {
+                text: message
+            };
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert("Message sent successfully!");
+                } else {
+                    alert(`Error: ${response.status}`);
+                }
+            } catch (error) {
+                alert("Failed to send message: " + error.message);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Send an Anonymous Message</h1>
+    <form onsubmit="sendMessage(event)">
+        <textarea id="message" placeholder="Enter your message here" rows="5" cols="50" required></textarea>
+        <br><br>
+        <button type="submit">Send Message</button>
+    </form>
+</body>
+</html>
